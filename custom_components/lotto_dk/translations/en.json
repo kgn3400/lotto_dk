@@ -1,0 +1,21 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Device is already configured"
+    },
+    "error": {
+      "missing_selection": "Nothing selected",
+      "unknown": "Unexpected error"
+    },
+    "step": {
+      "user": {
+        "title": "Danske lotto spil",
+        "data": {
+          "euro_jackpot": "Euro jackpot",
+          "lotto": "Lotto",
+          "viking_lotto": "Viking lotto"
+        }
+      }
+    }
+  }
+}
