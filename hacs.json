@@ -1,5 +1,6 @@
 {
   "name": "Lotto DK",
-  "content_in_root": false,
+  "country": ["DK"],
+  "render_readme": true,
   "homeassistant": "1.0.2"
 }
