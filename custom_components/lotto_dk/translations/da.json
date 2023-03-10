@@ -5,10 +5,29 @@
     },
     "error": {
       "missing_selection": "Intet valgt",
-      "unknown": "Uvented fejl"
+      "unknown": "Uventet fejl"
     },
     "step": {
       "user": {
+        "title": "Danske lotto spil",
+        "data": {
+          "euro_jackpot": "Euro jackpot",
+          "lotto": "Lotto",
+          "viking_lotto": "Viking lotto"
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "already_configured": "Enhed er allerede konfigureret"
+    },
+    "error": {
+      "missing_selection": "Intet valgt",
+      "unknown": "Uventet fejl"
+    },
+    "step": {
+      "init": {
         "title": "Danske lotto spil",
         "data": {
           "euro_jackpot": "Euro jackpot",

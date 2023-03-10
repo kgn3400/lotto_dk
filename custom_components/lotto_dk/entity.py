@@ -12,6 +12,7 @@ from homeassistant.helpers.update_coordinator import (
 from .const import DOMAIN
 
 
+# ------------------------------------------------------------------
 class LottoEntity(CoordinatorEntity[DataUpdateCoordinator], Entity):
     """Defines a Lotto entity."""
 
@@ -30,6 +31,6 @@ class LottoEntity(CoordinatorEntity[DataUpdateCoordinator], Entity):
             identifiers={(DOMAIN, "Lotto DK")},
             manufacturer="KGN",
             suggested_area="Hjem",
-            sw_version="1.0.1",
+            sw_version="1.0.4",
             name="Lotto DK",
         )
