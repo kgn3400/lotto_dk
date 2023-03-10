@@ -22,20 +22,20 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})
 
-    if entry.options.get(CONF_EURO_JACKPOT, None) is None:
-        lotto_api: LottoApi = LottoApi(
-            session,
-            entry.data[CONF_EURO_JACKPOT],
-            entry.data[CONF_LOTTO],
-            entry.data[CONF_VIKING_LOTTO],
-        )
-    else:
-        lotto_api: LottoApi = LottoApi(
-            session,
-            entry.options[CONF_EURO_JACKPOT],
-            entry.options[CONF_LOTTO],
-            entry.options[CONF_VIKING_LOTTO],
-        )
+    # if entry.options.get(CONF_EURO_JACKPOT, None) is None:
+    #     lotto_api: LottoApi = LottoApi(
+    #         session,
+    #         entry.data[CONF_EURO_JACKPOT],
+    #         entry.data[CONF_LOTTO],
+    #         entry.data[CONF_VIKING_LOTTO],
+    #     )
+    # else:
+    lotto_api: LottoApi = LottoApi(
+        session,
+        entry.options[CONF_EURO_JACKPOT],
+        entry.options[CONF_LOTTO],
+        entry.options[CONF_VIKING_LOTTO],
+    )
 
     coordinator: DataUpdateCoordinator = DataUpdateCoordinator(
         hass,

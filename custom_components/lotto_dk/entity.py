@@ -31,6 +31,6 @@ class LottoEntity(CoordinatorEntity[DataUpdateCoordinator], Entity):
             identifiers={(DOMAIN, "Lotto DK")},
             manufacturer="KGN",
             suggested_area="Hjem",
-            sw_version="1.0.4",
+            sw_version="1.0.5",
             name="Lotto DK",
         )

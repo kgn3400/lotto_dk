@@ -85,7 +85,9 @@ class LottoConfigFlow(ConfigFlow, domain=DOMAIN):
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
             else:
-                return self.async_create_entry(title="Lotto DK", data=user_input)
+                return self.async_create_entry(
+                    title="Lotto DK", data=user_input, options=user_input
+                )
         else:
             user_input = {}
 
@@ -140,10 +142,10 @@ class OptionsFlowHandler(OptionsFlow):
             else:
                 return self.async_create_entry(title="", data=user_input)
         else:
-            if self._options.get(CONF_EURO_JACKPOT, None) is None:
-                user_input = self._configs.copy()
-            else:
-                user_input = self._options.copy()
+            user_input = self._options.copy()
+            # if self._options.get(CONF_EURO_JACKPOT, None) is None:
+            #     user_input = self._configs.copy()
+            # else:
 
         return self.async_show_form(
             step_id="init",
