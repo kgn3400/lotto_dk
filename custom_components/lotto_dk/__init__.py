@@ -22,14 +22,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})
 
-    # if entry.options.get(CONF_EURO_JACKPOT, None) is None:
-    #     lotto_api: LottoApi = LottoApi(
-    #         session,
-    #         entry.data[CONF_EURO_JACKPOT],
-    #         entry.data[CONF_LOTTO],
-    #         entry.data[CONF_VIKING_LOTTO],
-    #     )
-    # else:
     lotto_api: LottoApi = LottoApi(
         session,
         entry.options[CONF_EURO_JACKPOT],
@@ -58,6 +50,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
+# ------------------------------------------------------------------
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
@@ -66,12 +59,14 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return unload_ok
 
 
+# ------------------------------------------------------------------
 async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Reload config entry."""
     await async_unload_entry(hass, entry)
     await async_setup_entry(hass, entry)
 
 
+# ------------------------------------------------------------------
 async def update_listener(
     hass: HomeAssistant,
     config_entry: ConfigEntry,

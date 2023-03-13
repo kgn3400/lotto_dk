@@ -9,7 +9,7 @@ from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
 )
 
-from .const import DOMAIN
+from .const import DOMAIN, DOMAIN_NAME
 
 
 # ------------------------------------------------------------------
@@ -26,11 +26,10 @@ class LottoEntity(CoordinatorEntity[DataUpdateCoordinator], Entity):
         """Initialize the Lotto entity."""
         super().__init__(coordinator=coordinator)
         self._attr_device_info = DeviceInfo(
-            # configuration_url="https://mit.odenserenovation.dk/hentkalender",
             entry_type=DeviceEntryType.SERVICE,
-            identifiers={(DOMAIN, "Lotto DK")},
+            identifiers={(DOMAIN, DOMAIN_NAME)},
             manufacturer="KGN",
             suggested_area="Hjem",
-            sw_version="1.0.5",
-            name="Lotto DK",
+            sw_version="1.0.6",
+            name=DOMAIN_NAME,
         )

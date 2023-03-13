@@ -1,7 +1,6 @@
 """Config flow for Lotto DK integration."""
 from __future__ import annotations
 
-import logging
 from typing import Any
 
 import voluptuous as vol
@@ -13,13 +12,20 @@ from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv
 
-from .const import CONF_EURO_JACKPOT, CONF_LOTTO, CONF_VIKING_LOTTO, DOMAIN
-
-_LOGGER = logging.getLogger(__name__)
+from .const import (
+    CONF_EURO_JACKPOT,
+    CONF_LOTTO,
+    CONF_VIKING_LOTTO,
+    DOMAIN,
+    DOMAIN_NAME,
+    LOGGER,
+)
 
 
 # ------------------------------------------------------------------
-async def _validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
+async def _validate_input(
+    hass: HomeAssistant, data: dict[str, Any], errors: dict[str, str]
+) -> bool:
     """Validate the user input allows us to connect."""
 
     if (
@@ -27,10 +33,10 @@ async def _validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str
         and data[CONF_LOTTO] is False
         and data[CONF_VIKING_LOTTO] is False
     ):
-        raise MissingSelection
+        errors["base"] = "missing_selection"
+        return False
 
-    # Return info that you want to store in the config entry.
-    return {"title": "Lotto"}
+    return True
 
 
 # ------------------------------------------------------------------
@@ -78,16 +84,14 @@ class LottoConfigFlow(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             try:
-                await _validate_input(self.hass, user_input)
-            except MissingSelection:
-                errors["base"] = "missing_selection"
+                if await _validate_input(self.hass, user_input, errors):
+                    return self.async_create_entry(
+                        title=DOMAIN_NAME, data=user_input, options=user_input
+                    )
+
             except Exception:  # pylint: disable=broad-except
-                _LOGGER.exception("Unexpected exception")
+                LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
-            else:
-                return self.async_create_entry(
-                    title="Lotto DK", data=user_input, options=user_input
-                )
         else:
             user_input = {}
 
@@ -133,19 +137,13 @@ class OptionsFlowHandler(OptionsFlow):
 
         if user_input is not None:
             try:
-                await _validate_input(self.hass, user_input)
-            except MissingSelection:
-                errors["base"] = "missing_selection"
+                if await _validate_input(self.hass, user_input, errors):
+                    return self.async_create_entry(title=DOMAIN_NAME, data=user_input)
             except Exception:  # pylint: disable=broad-except
-                _LOGGER.exception("Unexpected exception")
+                LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
-            else:
-                return self.async_create_entry(title="", data=user_input)
         else:
             user_input = self._options.copy()
-            # if self._options.get(CONF_EURO_JACKPOT, None) is None:
-            #     user_input = self._configs.copy()
-            # else:
 
         return self.async_show_form(
             step_id="init",

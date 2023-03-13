@@ -4,3 +4,5 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/kgn3400/lotto_dk)
 
 1. udgave
+
+[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=lotto_dk)
