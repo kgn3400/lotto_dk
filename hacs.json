@@ -2,5 +2,6 @@
   "name": "Lotto DK",
   "country": ["DK"],
   "render_readme": true,
-  "homeassistant": "2023.3.0"
+  "homeassistant": "2023.3.0",
+  "persistent_directory": "userfiles"
 }
