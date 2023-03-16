@@ -3,7 +3,7 @@ from logging import Logger, getLogger
 
 DOMAIN = "lotto_dk"
 DOMAIN_NAME = "Lotto DK"
-LOGGER: Logger = getLogger(__package__)
+LOGGER: Logger = getLogger(__name__)
 
 CONF_EURO_JACKPOT: str = "euro_jackpot"
 CONF_LOTTO: str = "lotto"

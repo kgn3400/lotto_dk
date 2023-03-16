@@ -13,7 +13,7 @@ from .const import DOMAIN, DOMAIN_NAME
 
 
 # ------------------------------------------------------------------
-class LottoEntity(CoordinatorEntity[DataUpdateCoordinator], Entity):
+class ComponentEntity(CoordinatorEntity[DataUpdateCoordinator], Entity):
     """Defines a Lotto entity."""
 
     _attr_has_entity_name = True
@@ -30,6 +30,6 @@ class LottoEntity(CoordinatorEntity[DataUpdateCoordinator], Entity):
             identifiers={(DOMAIN, DOMAIN_NAME)},
             manufacturer="KGN",
             suggested_area="Hjem",
-            sw_version="1.0.6",
+            sw_version="1.0.8",
             name=DOMAIN_NAME,
         )

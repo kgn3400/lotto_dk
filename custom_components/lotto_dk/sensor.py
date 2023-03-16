@@ -1,6 +1,8 @@
 """Support for Lotto dK."""
 from __future__ import annotations
 
+from os import getcwd
+
 from homeassistant.components.sensor import (  # SensorDeviceClass,; SensorEntityDescription,
     SensorEntity,
 )
@@ -10,8 +12,8 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import DOMAIN
-from .entity import LottoEntity
-from .lotto_api import LottoApi, LottoTypes
+from .entity import ComponentEntity
+from .component_api import ComponentApi, LottoTypes
 
 
 # ------------------------------------------------------
@@ -20,36 +22,36 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """ddf f"""
+    """Sensor setup"""
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
-    lotto_api: LottoApi = hass.data[DOMAIN][entry.entry_id]["lotto_api"]
+    component_api: ComponentApi = hass.data[DOMAIN][entry.entry_id]["component_api"]
 
     sensors = []
 
     # Euro jackpot
-    if lotto_api.get_euro_jackpot:
+    if component_api.get_euro_jackpot:
         sensors.append(
-            LottoSensor(coordinator, entry, lotto_api, LottoTypes.EURO_JACKPOT)
+            LottoSensor(coordinator, entry, component_api, LottoTypes.EURO_JACKPOT)
         )
 
     # Lotto
-    if lotto_api.get_lotto:
-        sensors.append(LottoSensor(coordinator, entry, lotto_api, LottoTypes.LOTTO))
+    if component_api.get_lotto:
+        sensors.append(LottoSensor(coordinator, entry, component_api, LottoTypes.LOTTO))
 
     # Viking Lotto
-    if lotto_api.get_viking_lotto:
+    if component_api.get_viking_lotto:
         sensors.append(
-            LottoSensor(coordinator, entry, lotto_api, LottoTypes.VIKING_LOTTO)
+            LottoSensor(coordinator, entry, component_api, LottoTypes.VIKING_LOTTO)
         )
 
-    sensors.append(LottoScrollSensor(coordinator, entry, lotto_api))
+    sensors.append(LottoScrollSensor(coordinator, entry, component_api))
 
     async_add_entities(sensors)
 
 
 # ------------------------------------------------------
 # ------------------------------------------------------
-class LottoSensor(LottoEntity, SensorEntity):
+class LottoSensor(ComponentEntity, SensorEntity):
     """Sensor class for lotto"""
 
     # ------------------------------------------------------
@@ -57,12 +59,12 @@ class LottoSensor(LottoEntity, SensorEntity):
         self,
         coordinator: DataUpdateCoordinator,
         entry: ConfigEntry,
-        lotto_api: LottoApi,
+        component_api: ComponentApi,
         lotto_type: LottoTypes,
     ) -> None:
         super().__init__(coordinator, entry)
 
-        self.lotto_api = lotto_api
+        self.component_api = component_api
         self.coordinator = coordinator
         self.lotto_type = lotto_type
 
@@ -90,11 +92,15 @@ class LottoSensor(LottoEntity, SensorEntity):
     @property
     def native_value(self) -> str | None:
         if self.lotto_type == LottoTypes.EURO_JACKPOT:
-            return str(int(self.lotto_api.euro_jackpot_price_pool / 1000000)) + " mio"
+            return (
+                str(int(self.component_api.euro_jackpot_price_pool / 1000000)) + " mio"
+            )
         elif self.lotto_type == LottoTypes.VIKING_LOTTO:
-            return str(int(self.lotto_api.viking_lotto_price_pool / 1000000)) + " mio"
+            return (
+                str(int(self.component_api.viking_lotto_price_pool / 1000000)) + " mio"
+            )
         else:
-            return str(int(self.lotto_api.lotto_price_pool / 1000000)) + " mio"
+            return str(int(self.component_api.lotto_price_pool / 1000000)) + " mio"
 
     # ------------------------------------------------------
     @property
@@ -102,12 +108,12 @@ class LottoSensor(LottoEntity, SensorEntity):
         attr: dict = {}
 
         if self.lotto_type == LottoTypes.EURO_JACKPOT:
-            attr["price_pool"] = self.lotto_api.euro_jackpot_price_pool
+            attr["price_pool"] = self.component_api.euro_jackpot_price_pool
         elif self.lotto_type == LottoTypes.VIKING_LOTTO:
-            attr["price_pool"] = self.lotto_api.viking_lotto_price_pool
+            attr["price_pool"] = self.component_api.viking_lotto_price_pool
         else:
-            attr["price_pool"] = self.lotto_api.lotto_price_pool
-
+            attr["price_pool"] = self.component_api.lotto_price_pool
+        attr["dir"] = getcwd()
         return attr
 
     # ------------------------------------------------------
@@ -142,19 +148,19 @@ class LottoSensor(LottoEntity, SensorEntity):
 
 # ------------------------------------------------------
 # ------------------------------------------------------
-class LottoScrollSensor(LottoEntity, SensorEntity):
-    """Sensor class for lotto"""
+class LottoScrollSensor(ComponentEntity, SensorEntity):
+    """Sensor class for lotto scroll"""
 
     # ------------------------------------------------------
     def __init__(
         self,
         coordinator: DataUpdateCoordinator,
         entry: ConfigEntry,
-        lotto_api: LottoApi,
+        component_api: ComponentApi,
     ) -> None:
         super().__init__(coordinator, entry)
 
-        self.lotto_api = lotto_api
+        self.component_api = component_api
         self.coordinator = coordinator
         self._name = "Lotto puljer"
         self._unique_id = "lotto_puljer"
@@ -172,12 +178,12 @@ class LottoScrollSensor(LottoEntity, SensorEntity):
     # ------------------------------------------------------
     # @property
     # def state(self) -> str:
-    #     return self.lotto_api.lotto_price_pool_scroll
+    #     return self.component_api.lotto_price_pool_scroll
 
     # ------------------------------------------------------
     @property
     def native_value(self) -> str | None:
-        return self.lotto_api.lotto_price_pool_scroll
+        return self.component_api.lotto_price_pool_scroll
 
     # ------------------------------------------------------
     @property

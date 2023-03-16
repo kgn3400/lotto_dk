@@ -67,7 +67,7 @@ def _create_form(
 
 # ------------------------------------------------------------------
 # ------------------------------------------------------------------
-class LottoConfigFlow(ConfigFlow, domain=DOMAIN):
+class ConfigFlowHandler(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Lotto DK."""
 
     VERSION = 1
