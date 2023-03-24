@@ -7,10 +7,15 @@ import asyncio
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-from homeassistant.core import ServiceCall
+
 from aiohttp.client import ClientSession
 import async_timeout
-from bs4 import BeautifulSoup  # type: ignore
+from bs4 import BeautifulSoup
+
+from homeassistant.core import ServiceCall
+from homeassistant.helpers.update_coordinator import (
+    DataUpdateCoordinator,  # type: ignore
+)
 
 
 class LottoTypes(Enum):
@@ -52,6 +57,7 @@ class ComponentApi:
         self.lotto_price_pool_scroll_next: LottoTypes = LottoTypes.EURO_JACKPOT
         self.next_webscrape: datetime = datetime.now()
         self.next_webscrape_delta: int = 60
+        self.coordinator: DataUpdateCoordinator
 
         self.find_next_lotto_scroll()
 
@@ -59,6 +65,7 @@ class ComponentApi:
     async def update_service(self, call: ServiceCall) -> None:
         """Lotto update service interface"""
         await self.update()
+        await self.coordinator.async_refresh()
 
     # ------------------------------------------------------------------
     async def update(self) -> None:
