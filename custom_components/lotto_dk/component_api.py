@@ -1,8 +1,4 @@
-""" ------------------------------------------------------------------
-# File name : lotto_api.py
-# Copyright 2023 KGN Data. All rights reserved.
-# ------------------------------------------------------------------"""
-
+"""Lotto interface."""
 import asyncio
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -19,7 +15,7 @@ from homeassistant.helpers.update_coordinator import (
 
 
 class LottoTypes(Enum):
-    """Lotto enum"""
+    """Lotto enum."""
 
     LOTTO = 1
     EURO_JACKPOT = 2
@@ -30,7 +26,7 @@ class LottoTypes(Enum):
 # ------------------------------------------------------------------
 @dataclass
 class ComponentApi:
-    """Lotto interface"""
+    """Lotto interface."""
 
     _EURO_JACKPOT_URL = "https://danskespil.dk/eurojackpot"
     _LOTTO_URL = "https://danskespil.dk/lotto"
@@ -43,6 +39,7 @@ class ComponentApi:
         lotto: bool,
         viking_lotto: bool,
     ) -> None:
+        """Lotto interface."""
         self.session = session
         self.get_euro_jackpot: bool = euro_jackpot
         """Should euro jackpot be fetched"""
@@ -63,13 +60,13 @@ class ComponentApi:
 
     # ------------------------------------------------------------------
     async def update_service(self, call: ServiceCall) -> None:
-        """Lotto update service interface"""
+        """Lotto update service interface."""
         await self.update()
         await self.coordinator.async_refresh()
 
     # ------------------------------------------------------------------
     async def update(self) -> None:
-        """Lotto update interface"""
+        """Lotto update interface."""
 
         if self.next_webscrape < datetime.now():
             self.next_webscrape = datetime.now() + timedelta(
@@ -117,7 +114,7 @@ class ComponentApi:
 
     # ------------------------------------------------------
     def roll_price_pools(self) -> None:
-        """Roll price pools"""
+        """Roll price pools."""
 
         if (
             self.get_euro_jackpot
@@ -146,7 +143,7 @@ class ComponentApi:
 
     # ------------------------------------------------------
     def find_next_lotto_scroll(self) -> None:
-        """Roll price pools"""
+        """Roll price pools."""
 
         if self.lotto_price_pool_scroll_next == LottoTypes.EURO_JACKPOT:
             if self.get_lotto:

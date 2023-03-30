@@ -9,7 +9,6 @@ import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv
 
 from .const import (
@@ -150,9 +149,3 @@ class OptionsFlowHandler(OptionsFlow):
             data_schema=_create_form(user_input),
             errors=errors,
         )
-
-
-# ------------------------------------------------------------------
-# ------------------------------------------------------------------
-class MissingSelection(HomeAssistantError):
-    """Error to indicate nothing was selected."""

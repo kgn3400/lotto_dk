@@ -1,5 +1,6 @@
 """Services for Lotto integration."""
 from homeassistant.core import HomeAssistant
+
 from .component_api import ComponentApi
 from .const import DOMAIN
 

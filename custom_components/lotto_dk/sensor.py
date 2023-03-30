@@ -1,4 +1,4 @@
-"""Support for Lotto dK."""
+"""Sensor for Lotto dK."""
 from __future__ import annotations
 
 from os import getcwd
@@ -11,9 +11,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
+from .component_api import ComponentApi, LottoTypes
 from .const import DOMAIN
 from .entity import ComponentEntity
-from .component_api import ComponentApi, LottoTypes
 
 
 # ------------------------------------------------------
@@ -22,7 +22,7 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Sensor setup"""
+    """Sensor setup."""
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     component_api: ComponentApi = hass.data[DOMAIN][entry.entry_id]["component_api"]
 
@@ -52,7 +52,7 @@ async def async_setup_entry(
 # ------------------------------------------------------
 # ------------------------------------------------------
 class LottoSensor(ComponentEntity, SensorEntity):
-    """Sensor class for lotto"""
+    """Sensor class for lotto."""
 
     # ------------------------------------------------------
     def __init__(
@@ -62,6 +62,8 @@ class LottoSensor(ComponentEntity, SensorEntity):
         component_api: ComponentApi,
         lotto_type: LottoTypes,
     ) -> None:
+        """Lotto sensor."""
+
         super().__init__(coordinator, entry)
 
         self.component_api = component_api
@@ -81,16 +83,32 @@ class LottoSensor(ComponentEntity, SensorEntity):
     # ------------------------------------------------------
     @property
     def name(self) -> str:
+        """Name.
+
+        Returns:
+            str: Name
+        """
+
         return self._name
 
     # ------------------------------------------------------
     @property
     def icon(self) -> str:
+        """Icon.
+
+        Returns:
+            str: Icon
+        """
         return "mdi:cash-multiple"
 
     # ------------------------------------------------------
     @property
     def native_value(self) -> str | None:
+        """Native value.
+
+        Returns:
+            str | None: Native value
+        """
         if self.lotto_type == LottoTypes.EURO_JACKPOT:
             return (
                 str(int(self.component_api.euro_jackpot_price_pool / 1000000)) + " mio"
@@ -105,6 +123,11 @@ class LottoSensor(ComponentEntity, SensorEntity):
     # ------------------------------------------------------
     @property
     def extra_state_attributes(self) -> dict:
+        """Extra state attributes.
+
+        Returns:
+            dict: Extra state attributes
+        """
         attr: dict = {}
 
         if self.lotto_type == LottoTypes.EURO_JACKPOT:
@@ -119,6 +142,11 @@ class LottoSensor(ComponentEntity, SensorEntity):
     # ------------------------------------------------------
     @property
     def unique_id(self) -> str:
+        """Unique id.
+
+        Returns:
+            str: Unique  id
+        """
         return self._unique_id
 
     # ------------------------------------------------------
@@ -149,7 +177,7 @@ class LottoSensor(ComponentEntity, SensorEntity):
 # ------------------------------------------------------
 # ------------------------------------------------------
 class LottoScrollSensor(ComponentEntity, SensorEntity):
-    """Sensor class for lotto scroll"""
+    """Sensor class for lotto scroll."""
 
     # ------------------------------------------------------
     def __init__(
@@ -158,6 +186,7 @@ class LottoScrollSensor(ComponentEntity, SensorEntity):
         entry: ConfigEntry,
         component_api: ComponentApi,
     ) -> None:
+        """Lotto scroll sensor."""
         super().__init__(coordinator, entry)
 
         self.component_api = component_api
@@ -168,11 +197,21 @@ class LottoScrollSensor(ComponentEntity, SensorEntity):
     # ------------------------------------------------------
     @property
     def name(self) -> str:
+        """Name.
+
+        Returns:
+            str: Name
+        """
         return self._name
 
     # ------------------------------------------------------
     @property
     def icon(self) -> str:
+        """Icon.
+
+        Returns:
+            str: Icon
+        """
         return "mdi:cash-multiple"
 
     # ------------------------------------------------------
@@ -183,11 +222,17 @@ class LottoScrollSensor(ComponentEntity, SensorEntity):
     # ------------------------------------------------------
     @property
     def native_value(self) -> str | None:
+        """Native value."""
         return self.component_api.lotto_price_pool_scroll
 
     # ------------------------------------------------------
     @property
     def extra_state_attributes(self) -> dict:
+        """Extra state attributes.
+
+        Returns:
+            dict: Extra state attributes
+        """
         attr: dict = {}
 
         return attr
@@ -195,6 +240,11 @@ class LottoScrollSensor(ComponentEntity, SensorEntity):
     # ------------------------------------------------------
     @property
     def unique_id(self) -> str:
+        """Unique id.
+
+        Returns:
+            str: Unique id
+        """
         return self._unique_id
 
     # ------------------------------------------------------

@@ -28,7 +28,6 @@
     },
     "step": {
       "init": {
-        "title": "Danske lotto spil",
         "data": {
           "euro_jackpot": "Euro jackpot",
           "lotto": "Lotto",
