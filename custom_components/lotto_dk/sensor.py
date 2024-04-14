@@ -1,7 +1,6 @@
 """Sensor for Lotto dK."""
-from __future__ import annotations
 
-from os import getcwd
+from __future__ import annotations
 
 from homeassistant.components.sensor import (  # SensorDeviceClass,; SensorEntityDescription,
     SensorEntity,
@@ -12,7 +11,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .component_api import ComponentApi, LottoTypes
-from .const import DOMAIN
+from .const import DOMAIN, TRANSLATION_KEY
 from .entity import ComponentEntity
 
 
@@ -70,6 +69,8 @@ class LottoSensor(ComponentEntity, SensorEntity):
         self.coordinator = coordinator
         self.lotto_type = lotto_type
 
+        self.translation_key = TRANSLATION_KEY
+
         if self.lotto_type == LottoTypes.EURO_JACKPOT:
             self._name = "Euro jackpot"
             self._unique_id = "euro_jackpot"
@@ -87,19 +88,21 @@ class LottoSensor(ComponentEntity, SensorEntity):
 
         Returns:
             str: Name
+
         """
 
         return self._name
 
     # ------------------------------------------------------
-    @property
-    def icon(self) -> str:
-        """Icon.
+    # @property
+    # def icon(self) -> str:
+    #     """Icon.
 
-        Returns:
-            str: Icon
-        """
-        return "mdi:cash-multiple"
+    #     Returns:
+    #         str: Icon
+
+    #     """
+    #     return "mdi:cash-multiple"
 
     # ------------------------------------------------------
     @property
@@ -108,6 +111,7 @@ class LottoSensor(ComponentEntity, SensorEntity):
 
         Returns:
             str | None: Native value
+
         """
         if self.lotto_type == LottoTypes.EURO_JACKPOT:
             return (
@@ -127,6 +131,7 @@ class LottoSensor(ComponentEntity, SensorEntity):
 
         Returns:
             dict: Extra state attributes
+
         """
         attr: dict = {}
 
@@ -136,7 +141,6 @@ class LottoSensor(ComponentEntity, SensorEntity):
             attr["price_pool"] = self.component_api.viking_lotto_price_pool
         else:
             attr["price_pool"] = self.component_api.lotto_price_pool
-        attr["dir"] = getcwd()
         return attr
 
     # ------------------------------------------------------
@@ -146,6 +150,7 @@ class LottoSensor(ComponentEntity, SensorEntity):
 
         Returns:
             str: Unique  id
+
         """
         return self._unique_id
 
@@ -201,6 +206,7 @@ class LottoScrollSensor(ComponentEntity, SensorEntity):
 
         Returns:
             str: Name
+
         """
         return self._name
 
@@ -211,13 +217,9 @@ class LottoScrollSensor(ComponentEntity, SensorEntity):
 
         Returns:
             str: Icon
+
         """
         return "mdi:cash-multiple"
-
-    # ------------------------------------------------------
-    # @property
-    # def state(self) -> str:
-    #     return self.component_api.lotto_price_pool_scroll
 
     # ------------------------------------------------------
     @property
@@ -232,6 +234,7 @@ class LottoScrollSensor(ComponentEntity, SensorEntity):
 
         Returns:
             dict: Extra state attributes
+
         """
         attr: dict = {}
 
@@ -244,6 +247,7 @@ class LottoScrollSensor(ComponentEntity, SensorEntity):
 
         Returns:
             str: Unique id
+
         """
         return self._unique_id
 

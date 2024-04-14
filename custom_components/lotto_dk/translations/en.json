@@ -1,4 +1,11 @@
 {
+  "title": "Lotto DK",
+  "entity_component": {
+    "_": {
+      "name": "Lotto DK"
+    }
+  },
+
   "config": {
     "abort": {
       "already_configured": "Device is already configured"
@@ -34,6 +41,13 @@
           "viking_lotto": "Viking lotto"
         }
       }
+    }
+  },
+
+  "services": {
+    "update": {
+      "description": "Update lotto price pools.",
+      "name": "Update"
     }
   }
 }

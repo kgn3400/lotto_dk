@@ -1,11 +1,11 @@
 """Lotto interface."""
-import asyncio
+
+from asyncio import timeout
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 
 from aiohttp.client import ClientSession
-import async_timeout
 from bs4 import BeautifulSoup
 
 from homeassistant.core import ServiceCall
@@ -59,7 +59,7 @@ class ComponentApi:
         self.find_next_lotto_scroll()
 
     # ------------------------------------------------------------------
-    async def update_service(self, call: ServiceCall) -> None:
+    async def async_update_service(self, call: ServiceCall) -> None:
         """Lotto update service interface."""
         await self.update()
         await self.coordinator.async_refresh()
@@ -78,19 +78,19 @@ class ComponentApi:
                 self.close_session = True
 
             if self.get_lotto:
-                pool: int = await self._get_price_pool(self._LOTTO_URL)
+                pool: int = await self._async_get_price_pool(self._LOTTO_URL)
 
                 if pool != 0:
                     self.lotto_price_pool = pool
 
             if self.get_viking_lotto:
-                pool: int = await self._get_price_pool(self._VIKING_LOTTO_URL)
+                pool: int = await self._async_get_price_pool(self._VIKING_LOTTO_URL)
 
                 if pool != 0:
                     self.viking_lotto_price_pool = pool
 
             if self.get_euro_jackpot:
-                pool: int = await self._get_price_pool(self._EURO_JACKPOT_URL)
+                pool: int = await self._async_get_price_pool(self._EURO_JACKPOT_URL)
 
                 if pool != 0:
                     self.euro_jackpot_price_pool = pool
@@ -101,13 +101,13 @@ class ComponentApi:
         self.roll_price_pools()
 
     # ------------------------------------------------------
-    async def _get_price_pool(self, url: str) -> int:
+    async def _async_get_price_pool(self, url: str) -> int:
         try:
-            async with async_timeout.timeout(self.request_timeout):
+            async with timeout(self.request_timeout):
                 response = await self.session.request("GET", url)  # type: ignore
                 soup = BeautifulSoup(await response.text(), "html.parser")
                 return int(soup.title.text.split()[4].replace(".", ""))  # type: ignore
-        except asyncio.TimeoutError:
+        except TimeoutError:
             pass
 
         return 0

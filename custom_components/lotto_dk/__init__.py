@@ -85,4 +85,3 @@ async def update_listener(
     component_api.get_viking_lotto = config_entry.options[CONF_VIKING_LOTTO]
     await hass.config_entries.async_reload(config_entry.entry_id)
 
-    return

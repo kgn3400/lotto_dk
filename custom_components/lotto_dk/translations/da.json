@@ -1,4 +1,11 @@
 {
+  "title": "Lotto DK",
+  "entity_component": {
+    "_": {
+      "name": "Lotto DK"
+    }
+  },
+
   "config": {
     "abort": {
       "already_configured": "Enhed er allerede konfigureret"
@@ -33,6 +40,13 @@
           "viking_lotto": "Viking lotto"
         }
       }
+    }
+  },
+
+  "services": {
+    "update": {
+      "description": "Opdater lotto puljer.",
+      "name": "Opdater"
     }
   }
 }
