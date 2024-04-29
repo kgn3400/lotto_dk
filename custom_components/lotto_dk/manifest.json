@@ -1,15 +1,20 @@
 {
   "domain": "lotto_dk",
   "name": "Lotto DK",
-  "codeowners": ["@kgn3400"],
+  "codeowners": [
+    "@kgn3400"
+  ],
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/kgn3400/lotto_dk",
   "homekit": {},
   "iot_class": "cloud_polling",
-  "requirements": ["beautifulsoup4", "html.parser"],
+  "requirements": [
+    "beautifulsoup4",
+    "html.parser"
+  ],
   "single_config_entry": true,
   "ssdp": [],
-  "version": "1.0.12",
+  "version": "1.0.13",
   "zeroconf": []
 }

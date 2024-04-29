@@ -1,11 +1,11 @@
 """Config flow for Lotto DK integration."""
+
 from __future__ import annotations
 
 from typing import Any
 
 import voluptuous as vol
 
-#  from homeassistant import config_entries
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
@@ -13,12 +13,17 @@ from homeassistant.helpers import config_validation as cv
 
 from .const import (
     CONF_EURO_JACKPOT,
+    CONF_LISTEN_TO_TIMER_TRIGGER,
     CONF_LOTTO,
+    CONF_RESTART_TIMER,
     CONF_VIKING_LOTTO,
     DOMAIN,
     DOMAIN_NAME,
     LOGGER,
 )
+
+#  from homeassistant import config_entries
+from .fix_entity_selector import EntitySelector, EntitySelectorConfig
 
 
 # ------------------------------------------------------------------
@@ -59,6 +64,16 @@ def _create_form(
             vol.Required(
                 CONF_VIKING_LOTTO,
                 default=user_input.get(CONF_VIKING_LOTTO, True),
+            ): cv.boolean,
+            vol.Optional(
+                CONF_LISTEN_TO_TIMER_TRIGGER,
+                default=user_input.get(CONF_LISTEN_TO_TIMER_TRIGGER, ""),
+            ): EntitySelector(
+                EntitySelectorConfig(integration="timer", multiple=False),
+            ),
+            vol.Optional(
+                CONF_RESTART_TIMER,
+                default=user_input.get(CONF_RESTART_TIMER, False),
             ): cv.boolean,
         }
     )

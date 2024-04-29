@@ -5,7 +5,6 @@
       "name": "Lotto DK"
     }
   },
-
   "config": {
     "abort": {
       "already_configured": "Enhed er allerede konfigureret"
@@ -19,7 +18,9 @@
         "data": {
           "euro_jackpot": "Euro jackpot",
           "lotto": "Lotto",
-          "viking_lotto": "Viking lotto"
+          "viking_lotto": "Viking lotto",
+          "listen_to_timer_trigger": "Brug Timer hjælper som scroll udløser",
+          "restart_timer": "Genstart Timer hjælper automatisk"
         }
       }
     }
@@ -37,12 +38,19 @@
         "data": {
           "euro_jackpot": "Euro jackpot",
           "lotto": "Lotto",
-          "viking_lotto": "Viking lotto"
+          "viking_lotto": "Viking lotto",
+          "listen_to_timer_trigger": "Brug Timer hjælper som scroll udløser",
+          "restart_timer": "Genstart Timer hjælper automatisk"
         }
       }
     }
   },
-
+  "issues": {
+    "missing_timer_entity": {
+      "description": "Det ser ud till at enten Timer hjælper `{timer_entity}` er bleve omdøbt eller slettet som bruges af Lotto DK `{entity}`. \n\n Veligt fix problemet.",
+      "title": "Lotto DK: Timer hjæper er slettet eller omdøbt"
+    }
+  },
   "services": {
     "update": {
       "description": "Opdater lotto puljer.",

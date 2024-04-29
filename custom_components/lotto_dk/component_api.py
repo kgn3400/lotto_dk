@@ -9,9 +9,7 @@ from aiohttp.client import ClientSession
 from bs4 import BeautifulSoup
 
 from homeassistant.core import ServiceCall
-from homeassistant.helpers.update_coordinator import (
-    DataUpdateCoordinator,  # type: ignore
-)
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 
 class LottoTypes(Enum):
@@ -104,9 +102,9 @@ class ComponentApi:
     async def _async_get_price_pool(self, url: str) -> int:
         try:
             async with timeout(self.request_timeout):
-                response = await self.session.request("GET", url)  # type: ignore
+                response = await self.session.request("GET", url)
                 soup = BeautifulSoup(await response.text(), "html.parser")
-                return int(soup.title.text.split()[4].replace(".", ""))  # type: ignore
+                return int(soup.title.text.split()[4].replace(".", ""))
         except TimeoutError:
             pass
 
