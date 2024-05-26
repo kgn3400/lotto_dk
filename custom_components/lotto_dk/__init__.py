@@ -1,4 +1,5 @@
 """The Lotto DK integration."""
+
 from __future__ import annotations
 
 from datetime import timedelta
@@ -24,6 +25,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})
     component_api: ComponentApi = ComponentApi(
+        hass,
         session,
         entry.options[CONF_EURO_JACKPOT],
         entry.options[CONF_LOTTO],
@@ -84,4 +86,3 @@ async def update_listener(
     component_api.get_lotto = config_entry.options[CONF_LOTTO]
     component_api.get_viking_lotto = config_entry.options[CONF_VIKING_LOTTO]
     await hass.config_entries.async_reload(config_entry.entry_id)
-

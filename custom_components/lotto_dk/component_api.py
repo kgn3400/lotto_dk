@@ -8,7 +8,7 @@ from enum import Enum
 from aiohttp.client import ClientSession
 from bs4 import BeautifulSoup
 
-from homeassistant.core import ServiceCall
+from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 
@@ -32,12 +32,14 @@ class ComponentApi:
 
     def __init__(
         self,
+        hass: HomeAssistant,
         session: ClientSession | None,
         euro_jackpot: bool,
         lotto: bool,
         viking_lotto: bool,
     ) -> None:
         """Lotto interface."""
+        self.hass = hass
         self.session = session
         self.get_euro_jackpot: bool = euro_jackpot
         """Should euro jackpot be fetched"""
@@ -103,7 +105,9 @@ class ComponentApi:
         try:
             async with timeout(self.request_timeout):
                 response = await self.session.request("GET", url)
-                soup = BeautifulSoup(await response.text(), "html.parser")
+                soup = await self.hass.async_add_executor_job(
+                    BeautifulSoup, await response.text(), "lxml"
+                )
                 return int(soup.title.text.split()[4].replace(".", ""))
         except TimeoutError:
             pass
