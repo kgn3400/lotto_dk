@@ -265,13 +265,6 @@ class LottoScrollSensor(ComponentEntity, SensorEntity):
         return self.component_api.lotto_price_pool_scroll
 
     # ------------------------------------------------------
-    # @property
-    # def native_unit_of_measurement(self) -> str | None:
-    #     """Return the unit the value is expressed in."""
-
-    #     return "mio"
-
-    # ------------------------------------------------------
     @property
     def extra_state_attributes(self) -> dict:
         """Extra state attributes.

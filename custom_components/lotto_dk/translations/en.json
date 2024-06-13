@@ -46,6 +46,17 @@
       }
     }
   },
+  "entity": {
+    "sensor": {
+      "lotto_dk": {
+        "state_attributes": {
+          "content": {
+            "price_pool": "Price pool"
+          }
+        }
+      }
+    }
+  },
   "issues": {
     "missing_timer_entity": {
       "description": "It looks like either the Timer helper `{timer_entity}` has been deleted or removed for use in Lotto DK `{entity}`. \n\n Please fix this problem.",

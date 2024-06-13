@@ -45,6 +45,17 @@
       }
     }
   },
+  "entity": {
+    "sensor": {
+      "lotto_dk": {
+        "state_attributes": {
+          "price_pool": {
+            "name": "Gevinst pulje"
+          }
+        }
+      }
+    }
+  },
   "issues": {
     "missing_timer_entity": {
       "description": "Det ser ud till at enten Timer hjælper `{timer_entity}` er bleve omdøbt eller slettet som bruges af Lotto DK `{entity}`. \n\n Veligt fix problemet.",
