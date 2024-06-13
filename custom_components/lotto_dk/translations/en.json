@@ -50,8 +50,8 @@
     "sensor": {
       "lotto_dk": {
         "state_attributes": {
-          "content": {
-            "price_pool": "Price pool"
+          "price_pool": {
+            "name": "Price pool"
           }
         }
       }
