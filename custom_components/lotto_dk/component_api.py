@@ -11,6 +11,8 @@ from bs4 import BeautifulSoup
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
+from .const import DOMAIN
+
 
 class LottoTypes(Enum):
     """Lotto enum."""
@@ -55,6 +57,9 @@ class ComponentApi:
         self.next_webscrape: datetime = datetime.now()
         self.next_webscrape_delta: int = 60
         self.coordinator: DataUpdateCoordinator
+
+        """Setup the actions for the Lotto integration."""
+        hass.services.async_register(DOMAIN, "update", self.async_update_service)
 
         self.find_next_lotto_scroll()
 
