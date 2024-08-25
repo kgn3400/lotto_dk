@@ -116,6 +116,8 @@ class ComponentApi:
                 return int(soup.title.text.split()[4].replace(".", ""))
         except TimeoutError:
             pass
+        except IndexError:
+            pass
 
         return 0
 
