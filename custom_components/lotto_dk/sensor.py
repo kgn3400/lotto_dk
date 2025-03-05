@@ -13,12 +13,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import CommonConfigEntry
 from .component_api import LottoTypes
-from .const import (
-    CONF_LISTEN_TO_TIMER_TRIGGER,
-    CONF_RESTART_TIMER,
-    TRANSLATION_KEY,
-    RefreshType,
-)
+from .const import CONF_LISTEN_TO_TIMER_TRIGGER, CONF_RESTART_TIMER, TRANSLATION_KEY
 from .entity import ComponentEntity
 from .timer_trigger import TimerTrigger
 
@@ -195,28 +190,23 @@ class LottoScrollSensor(ComponentEntity, SensorEntity):
         self.coordinator = entry.runtime_data.coordinator
         self._name = "Lotto puljer"
         self._unique_id = "lotto_puljer"
-        self.refresh_type: RefreshType = RefreshType.NORMAL
 
-        if self.entry.options.get(CONF_LISTEN_TO_TIMER_TRIGGER, ""):
-            self.refresh_type = RefreshType.LISTEN_TO_TIMER_TRIGGER
-            self.timer_trigger = TimerTrigger(
-                self,
-                self.entry.options.get(CONF_LISTEN_TO_TIMER_TRIGGER, ""),
-                self.async_handle_timer_finished,
-                self.entry.options.get(CONF_RESTART_TIMER, ""),
-            )
-            self.coordinator.update_interval = None
+        self.timer_trigger = TimerTrigger(
+            self,
+            timer_entity=self.entry.options.get(CONF_LISTEN_TO_TIMER_TRIGGER, ""),
+            callback_trigger=self.async_handle_timer_finished,
+            duration=timedelta(
+                minutes=1,
+            ),
+            auto_restart=self.entry.options.get(CONF_RESTART_TIMER, ""),
+        )
+        self.coordinator.update_interval = None
 
     # ------------------------------------------------------------------
     async def async_handle_timer_finished(self, error: bool) -> None:
         """Handle timer finished."""
 
-        if error:
-            self.refresh_type = RefreshType.NORMAL
-            self.coordinator.update_interval = timedelta(minutes=1)
-
-        if self.refresh_type == RefreshType.LISTEN_TO_TIMER_TRIGGER:
-            await self.coordinator.async_refresh()
+        await self.coordinator.async_refresh()
 
     # ------------------------------------------------------
     @property
@@ -287,10 +277,3 @@ class LottoScrollSensor(ComponentEntity, SensorEntity):
     # ------------------------------------------------------
     async def async_hass_started(self, _event: Event) -> None:
         """Hass started."""
-
-        if self.refresh_type == RefreshType.NORMAL:
-            self.coordinator.update_interval = timedelta(minutes=1)
-        elif self.refresh_type == RefreshType.LISTEN_TO_TIMER_TRIGGER:
-            if not await self.timer_trigger.async_validate_timer():
-                self.coordinator.update_interval = timedelta(minutes=1)
-                self.refresh_type = RefreshType.NORMAL
