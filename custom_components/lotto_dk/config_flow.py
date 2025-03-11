@@ -14,6 +14,7 @@ from homeassistant.helpers.schema_config_entry_flow import (
     SchemaFlowError,
     SchemaFlowFormStep,
 )
+from homeassistant.util.uuid import random_uuid_hex
 
 from .const import (
     CONF_EURO_JACKPOT,
@@ -66,9 +67,24 @@ CONFIG_OPTIONS_SCHEMA = vol.Schema(
         ): cv.boolean,
     }
 )
+
+
+# ------------------------------------------------------------------
+async def config_schema_handler(
+    handler: SchemaCommonFlowHandler,
+) -> vol.Schema:
+    """Return schema for the sensor config step."""
+
+    if handler.parent_handler.unique_id is None:
+        await handler.parent_handler.async_set_unique_id(random_uuid_hex())
+        handler.parent_handler._abort_if_unique_id_configured()  # noqa: SLF001
+
+    return CONFIG_OPTIONS_SCHEMA
+
+
 CONFIG_FLOW = {
     "user": SchemaFlowFormStep(
-        CONFIG_OPTIONS_SCHEMA,
+        config_schema_handler,
         validate_user_input=_validate_input,
     ),
 }
