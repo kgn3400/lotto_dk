@@ -22,7 +22,7 @@ from .const import (
     TRANSLATION_KEY_MISSING_TIMER_ENTITY,
 )
 from .entity import ComponentEntity
-from .timer_trigger import TimerTrigger, TimerTriggerErrorEnum
+from .hass_util import TimerTrigger, TimerTriggerErrorEnum
 
 
 # ------------------------------------------------------

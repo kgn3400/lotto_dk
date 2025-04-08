@@ -11,7 +11,8 @@ from bs4 import BeautifulSoup
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .const import DOMAIN
+from .const import DOMAIN, LOGGER
+from .hass_util import handle_retries
 
 
 class LottoTypes(Enum):
@@ -83,42 +84,41 @@ class ComponentApi:
                 self.session = ClientSession()
                 self.close_session = True
 
-            if self.get_lotto:
-                pool: int = await self._async_get_price_pool(self._LOTTO_URL)
+            try:
+                if self.get_lotto:
+                    pool: int = await self._async_get_price_pool(self._LOTTO_URL)
 
-                if pool != 0:
-                    self.lotto_price_pool = pool
+                    if pool != 0:
+                        self.lotto_price_pool = pool
 
-            if self.get_viking_lotto:
-                pool: int = await self._async_get_price_pool(self._VIKING_LOTTO_URL)
+                if self.get_viking_lotto:
+                    pool: int = await self._async_get_price_pool(self._VIKING_LOTTO_URL)
 
-                if pool != 0:
-                    self.viking_lotto_price_pool = pool
+                    if pool != 0:
+                        self.viking_lotto_price_pool = pool
 
-            if self.get_euro_jackpot:
-                pool: int = await self._async_get_price_pool(self._EURO_JACKPOT_URL)
+                if self.get_euro_jackpot:
+                    pool: int = await self._async_get_price_pool(self._EURO_JACKPOT_URL)
 
-                if pool != 0:
-                    self.euro_jackpot_price_pool = pool
+                    if pool != 0:
+                        self.euro_jackpot_price_pool = pool
 
+            except Exception as err:  # noqa: BLE001
+                LOGGER.debug(f"Error in async_update: {err}")
             if self.session and self.close_session:
                 await self.session.close()
 
         self.roll_price_pools()
 
     # ------------------------------------------------------
+    @handle_retries(retries=5, retry_delay=5, raise_last_exception=True)
     async def _async_get_price_pool(self, url: str) -> int:
-        try:
-            async with timeout(self.request_timeout):
-                response = await self.session.get(url)
-                soup = await self.hass.async_add_executor_job(
-                    BeautifulSoup, await response.text(), "lxml"
-                )
-                return int(soup.title.text.split()[4].replace(".", ""))
-        except TimeoutError:
-            pass
-        except IndexError:
-            pass
+        async with timeout(self.request_timeout):
+            response = await self.session.get(url)
+            soup = await self.hass.async_add_executor_job(
+                BeautifulSoup, await response.text(), "lxml"
+            )
+            return int(soup.title.text.split()[4].replace(".", ""))
 
         return 0
 
