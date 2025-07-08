@@ -110,6 +110,10 @@ class ComponentApi:
 
         self.roll_price_pools()
 
+    async def async_set_parms_dyn(self) -> dict:
+        """Async set parms dyn."""
+        return {}
+
     # ------------------------------------------------------
     @handle_retries(retries=5, retry_delay=5, raise_last_exception=True)
     async def _async_get_price_pool(self, url: str) -> int:
